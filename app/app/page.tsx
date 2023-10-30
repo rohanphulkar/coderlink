@@ -12,6 +12,7 @@ import { VscSend } from "react-icons/vsc";
 const page: React.FC = () => {
   const token = Cookies.get("token");
   const [chats, setChats] = useState<[]>([]);
+  const [chatItems, setChatItems] = useState<[]>([]);
   const searchParams = useSearchParams();
   const chatQuery = searchParams.get("chat");
 
@@ -26,6 +27,24 @@ const page: React.FC = () => {
       const result = await response.data;
       if (status === 200) {
         setChats(result);
+      } else {
+        toast.error("Something went wrong.", { id: "1" });
+      }
+    } catch (error) {
+      toast.error("Something went wrong.", { id: "1" });
+    }
+  };
+  const fetchChatItems = async (query: string) => {
+    try {
+      const response = await api.get(`/chat/?chat=${query || ""}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const status = await response.status;
+      const result = await response.data;
+      if (status === 200) {
+        setChatItems(result);
       } else {
         toast.error("Something went wrong.", { id: "1" });
       }
@@ -49,20 +68,18 @@ const page: React.FC = () => {
           },
         }
       );
-      const status = await response.status;
-      const result = await response.data;
+      const status = response.status;
+      const result = response.data;
       if (status === 200) {
-        fetchChats();
+        fetchChatItems(result.chat);
         toast.dismiss();
       } else {
         toast.error("Something went wrong", { id: "1" });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
-      if (error) {
-        if (error?.response?.status === 401) {
-          toast.error("Your plan has been expired, please upgrade.");
-        }
+      if (error.response && error.response.status === 401) {
+        toast.error("Your plan has expired, please upgrade.");
       } else {
         toast.error("Something went wrong", { id: "1" });
       }
@@ -72,8 +89,10 @@ const page: React.FC = () => {
 
   useEffect(() => {
     fetchChats();
-  }, []);
-
+    if (chatQuery) {
+      fetchChatItems(chatQuery);
+    }
+  }, [chatQuery]);
   return (
     <div>
       {/* Content */}
@@ -88,10 +107,8 @@ const page: React.FC = () => {
               prompt below:
             </p>
             <div className="mt-6 h-[25rem] md:h-[35rem] overflow-y-auto">
-              {chats.length > 0 ? (
-                chats
-                  ?.find((chat: any) => chat.id === chatQuery)
-                  ?.chats?.map(
+              {chatItems.length > 0
+                ? chatItems?.map(
                     (chat: any) =>
                       chat.output && (
                         <div
@@ -102,11 +119,7 @@ const page: React.FC = () => {
                         </div>
                       )
                   )
-              ) : (
-                <div className="mx-auto w-full flex items-center justify-center">
-                  <Loader />
-                </div>
-              )}
+                : null}
             </div>
           </div>
           {/* Search */}

@@ -14,7 +14,7 @@ interface UserDetails {
 
 interface UserProfile {
   user: UserDetails;
-  plan_validity: string;
+  plan_validity: any;
   is_pro: boolean;
 }
 

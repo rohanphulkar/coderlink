@@ -2,7 +2,7 @@ import { api } from "@/components/api/api";
 import { format } from "date-fns";
 import Link from "next/link";
 import React from "react";
-
+export const revalidate = 10;
 const getBlogs = async () => {
   try {
     const response = await api.get("/blog/posts/");

@@ -1,6 +1,8 @@
 import { api } from "@/components/api/api";
 import React from "react";
 
+export const revalidate = 10;
+
 const getBlog = async (slug: any) => {
   try {
     const response = await api.get(`/blog/posts/${slug}/`);
