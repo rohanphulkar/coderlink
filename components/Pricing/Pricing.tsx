@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import SectionTitle from "./common/SectionTitle";
+import SectionTitle from "../common/SectionTitle";
 
 const Pricing: React.FC = () => {
   return (

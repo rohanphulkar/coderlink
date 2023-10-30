@@ -1,61 +1,84 @@
+"use client";
 import { api } from "@/components/api/api";
 import SectionTitle from "@/components/common/SectionTitle";
 import { format } from "date-fns";
-import { cookies } from "next/headers";
-import React from "react";
+import Cookies from "js-cookie";
+import Script from "next/script";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
-const cookieStore = cookies();
-const token = cookieStore.get("token")?.value;
+interface UserDetails {
+  name: string;
+  email: string;
+}
 
-const getUserProfile = async () => {
-  try {
-    const response = await api.get("/profile/profile/", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const result = await response.data;
-    const status = await response.status;
+interface UserProfile {
+  user: UserDetails;
+  plan_validity: string;
+  is_pro: boolean;
+}
 
-    if (status === 200) {
-      return result;
-    } else {
-      return {};
+interface Order {
+  id: number;
+  order_id: string;
+  amount: number;
+  status: string;
+  payment_id: string;
+}
+
+const Page: React.FC = () => {
+  const [userProfile, setUser] = useState<UserProfile | null>(null);
+  const [orders, setOrders] = useState<Order[] | null>(null);
+  const currentDate = new Date().toISOString().slice(0, 10);
+  const token = Cookies.get("token");
+
+  const getUser = async () => {
+    try {
+      const response = await api.get("/profile/profile/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        setUser(response.data);
+      } else {
+        toast.error("Something went wrong", { id: "1" });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong", { id: "1" });
     }
-  } catch (error) {
-    console.log(error);
-  }
-};
+  };
 
-const getuserOrders = async () => {
-  try {
-    const response = await api.get("/profile/orders/", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const result = await response.data;
-    const status = await response.status;
+  const getOrders = async () => {
+    try {
+      const response = await api.get("/profile/orders/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    if (status === 200) {
-      return result;
-    } else {
-      return [];
+      if (response.status === 200) {
+        setOrders(response.data);
+      } else {
+        toast.error("Something went wrong", { id: "1" });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong", { id: "1" });
     }
-  } catch (error) {
-    console.log(error);
-    return [];
-  }
-};
+  };
 
-const page: React.FC = async () => {
-  const userProfile = await getUserProfile();
-  const orders = await getuserOrders();
+  useEffect(() => {
+    getUser();
+    getOrders();
+  }, []);
 
   return (
     <div>
-      <main className="flex-1">
-        {/* Page title & actions */}
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+      <div className="flex-1">
         <div className="border-b border-gray-200 px-4 py-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <div className="min-w-0 flex-1">
             <SectionTitle title="Dashboard" />
@@ -63,24 +86,21 @@ const page: React.FC = async () => {
         </div>
 
         <div className="mt-6 px-4 sm:px-6 lg:px-8 pt-6 pb-12">
-          {/* Grid */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {/* Card */}
-            <div className="flex flex-col bg-white border shadow-sm rounded-xl  transition">
+            <div className="flex flex-col bg-white border shadow-sm rounded-xl transition">
               <div className="p-4 md:p-5">
                 <div className="flex">
                   <div className="grow ml-5">
                     <h3 className="font-medium text-lg text-gray-800">Name</h3>
                     <p className="text-gray-600 text-xl font-bold">
-                      {userProfile?.user?.name}
+                      {userProfile?.user.name}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-            {/* End Card */}
-            {/* Card */}
-            <div className="flex flex-col bg-white border shadow-sm rounded-xl  transition">
+
+            <div className="flex flex-col bg-white border shadow-sm rounded-xl transition">
               <div className="p-4 md:p-5">
                 <div className="flex">
                   <div className="grow ml-5">
@@ -88,15 +108,14 @@ const page: React.FC = async () => {
                       Email Address
                     </h3>
                     <p className="text-gray-600 text-xl font-bold">
-                      {userProfile?.user?.email}
+                      {userProfile?.user.email}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-            {/* End Card */}
-            {/* Card */}
-            <div className="flex flex-col bg-white border shadow-sm rounded-xl  transition">
+
+            <div className="flex flex-col bg-white border shadow-sm rounded-xl transition">
               <div className="p-4 md:p-5">
                 <div className="flex">
                   <div className="grow ml-5">
@@ -104,19 +123,38 @@ const page: React.FC = async () => {
                       Plan Validity
                     </h3>
                     <p className="text-gray-600 text-xl font-bold">
-                      {format(
-                        new Date(userProfile?.plan_validity),
-                        "dd MMMM, yyyy"
-                      )}
+                      {currentDate >= userProfile?.plan_validity
+                        ? format(
+                            new Date(userProfile?.plan_validity),
+                            "dd MMMM, yyyy"
+                          )
+                        : "Expired"}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-            {/* End Card */}
           </div>
-          {/* End Grid */}
         </div>
+
+        {!userProfile?.is_pro && (
+          <div className="bg-gradient-to-r from-primary to-blue-500 max-w-6xl mx-auto">
+            <div className="px-4 py-4 sm:px-6 lg:px-8 mx-auto">
+              <div className="grid justify-center md:grid-cols-2 md:justify-between md:items-center gap-2">
+                <div className="text-center md:text-left">
+                  <p className="mt-1 text-white font-bold text-2xl">
+                    Upgrade your plan
+                  </p>
+                </div>
+                <div className="mt-3 text-center md:text-left md:flex md:justify-end md:items-center">
+                  <button className="py-3 px-6 inline-flex justify-center items-center gap-2 rounded-full font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-0 transition-all text-sm">
+                    Upgrade
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="px-4 sm:px-6 lg:px-8 pt-6 pb-12">
           <div className="sm:flex sm:items-center">
@@ -166,33 +204,33 @@ const page: React.FC = async () => {
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {orders
-                      ?.filter((order: any) => order?.status !== "pending")
-                      ?.map((order: any, index: number) => (
-                        <tr key={order?.id}>
+                      ?.filter((order) => order.status !== "pending")
+                      .map((order, index) => (
+                        <tr key={order.id}>
                           <td className="whitespace-nowrap font-semibold py-4 px-3 text-lg text-gray-500">
                             {index + 1}
                           </td>
                           <td className="whitespace-nowrap font-semibold py-4 px-3 text-lg text-gray-500">
-                            {order?.order_id}
+                            {order.order_id}
                           </td>
                           <td className="whitespace-nowrap py-4 px-3 text-lg text-gray-500">
-                            &#8377;{order?.amount}
+                            &#8377;{order.amount}
                           </td>
                           <td
-                            className={`whitespace-nowrap capitalize py-4 px-3 text-lg text-gray-50`}
+                            className={`whitespace-nowrap capitalize py-4 px-3 text-lg text-gray-500`}
                           >
                             <span
                               className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-medium ${
-                                order?.status === "confirmed"
+                                order.status === "confirmed"
                                   ? "bg-green-100 text-green-800"
                                   : "bg-red-100 text-red-800"
-                              } `}
+                              }`}
                             >
-                              {order?.status}
+                              {order.status}
                             </span>
                           </td>
                           <td className="whitespace-nowrap py-4 px-3 text-lg text-gray-500">
-                            {order?.payment_id}
+                            {order.payment_id}
                           </td>
                         </tr>
                       ))}
@@ -202,9 +240,9 @@ const page: React.FC = async () => {
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 };
 
-export default page;
+export default Page;

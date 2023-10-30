@@ -4,8 +4,8 @@ import Navbar from "@/components/layout/Navbar";
 import type { Metadata } from "next";
 import { Syne } from "next/font/google";
 import Script from "next/script";
+import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
-
 const syne = Syne({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={syne.className}>
+        <NextTopLoader color="#3f00ff" />
         <Wrapper>
           <Navbar />
           {children}

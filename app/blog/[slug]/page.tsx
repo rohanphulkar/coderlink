@@ -6,6 +6,7 @@ const getBlog = async (slug: any) => {
     const response = await api.get(`/blog/posts/${slug}/`);
     const status = await response.status;
     const result = await response.data;
+
     if (status === 200) {
       return result;
     } else {
@@ -18,12 +19,12 @@ const getBlog = async (slug: any) => {
 };
 
 const page = async ({ params }: { params: any }) => {
-  const blog = getBlog(params.slug);
+  const blog = (await getBlog(params.slug)) || [];
 
   return (
     <div>
-      <div className="max-w-3xl px-4 pt-6 lg:pt-10 pb-12 sm:px-6 lg:px-8 mx-auto">
-        <div className="max-w-2xl">
+      <div className="max-w-5xl px-4 pt-6 lg:pt-10 pb-12 sm:px-6 lg:px-8 mx-auto">
+        <div className="max-w-5xl mx-auto">
           {/* Content */}
           <div className="space-y-5 md:space-y-8">
             <div className="space-y-3">
@@ -33,6 +34,7 @@ const page = async ({ params }: { params: any }) => {
             <img
               className="w-full object-cover rounded-xl"
               src={blog?.image}
+              loading="lazy"
               alt="Image Description"
             />
 

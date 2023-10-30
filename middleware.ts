@@ -1,25 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// This function can be marked `async` if using `await` inside
-export function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
   const token = request.cookies.get("token")?.value;
 
-  if (
-    pathname !== "/login" &&
-    pathname !== "/signup" &&
-    pathname !== "/user/dashboard" &&
-    !token
-  ) {
+  const isUserAuthenticated = !!token;
+  const isLoginPage = ["/login", "/signup"].includes(pathname);
+  const isProtectedRoute = ["/user/dashboard", "/app"].includes(pathname);
+
+  if (!isUserAuthenticated && isProtectedRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
-  } else if ((pathname === "/login" || pathname === "/signup") && token) {
-    return NextResponse.redirect(new URL("/", request.url));
-  } else {
-    return NextResponse.next();
   }
+
+  if (isUserAuthenticated && isLoginPage) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  return NextResponse.next();
 }
 
-// See "Matching Paths" below to learn more
 export const config = {
-  matcher: ["/login", "/signup", "/user/dashboard"],
+  matcher: ["/login", "/signup", "/user/dashboard", "/app"],
 };

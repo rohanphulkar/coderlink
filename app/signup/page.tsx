@@ -48,7 +48,7 @@ const page: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.loading("Processing...", { id: "1" });
+    toast.loading("Processing, Please Wait...", { id: "1" });
     try {
       const { name, email, password }: any = e.target;
       const response = await api.post("/user/register/", {
