@@ -37,9 +37,12 @@ const Navbar: React.FC = () => {
           >
             <div className="flex gap-5 mt-5 flex-row justify-center items-center sm:justify-end text-base sm:mt-0 sm:pl-5">
               {email ? (
+                <>
                 <Link href="/app">
                   <button className="font-medium text-gray-700">App</button>
-                </Link>
+                </Link><Link href="/upgrade">
+                <button className="font-medium text-gray-700">Upgrade</button>
+              </Link></>
               ) : (
                 <Link href="/">
                   <button className="font-medium text-gray-700">Home</button>
@@ -49,6 +52,7 @@ const Navbar: React.FC = () => {
               <Link href="/blog">
                 <button className="font-medium text-gray-700">Blog</button>
               </Link>
+              
 
               {email ? (
                 <>
@@ -111,7 +115,7 @@ const Navbar: React.FC = () => {
                       type="button"
                       className="font-semibold bg-base text-text px-4 py-2 rounded-full"
                     >
-                      Create Account
+                      Sign Up
                     </button>
                   </Link>
                 </>

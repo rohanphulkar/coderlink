@@ -31,6 +31,7 @@ export default function RootLayout({
           src="https://res.cloudinary.com/rohanphulkar/raw/upload/v1673963494/synfert/preline_norz6c.js"
           type="module"
         />
+        <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       </body>
     </html>
   );

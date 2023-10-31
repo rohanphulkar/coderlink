@@ -1,25 +1,15 @@
 import React from "react";
-
+import { GrOptimize } from "react-icons/gr";
+import { LuBrainCircuit } from "react-icons/lu";
+import { MdOutlineAttachMoney } from "react-icons/md";
 const Features: React.FC = () => {
   return (
     <div>
       <div className="flex flex-wrap justify-center -mx-4">
         <div className="w-full px-4 mb-6 md:w-1/2 lg:w-1/3">
           <div className="h-full p-6 text-left transition duration-200 rounded-md ">
-            <div className="inline-flex items-center justify-center w-16 h-16 mx-auto mb-6 text-green-600 bg-green-100 rounded-lg ">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width={16}
-                height={16}
-                fill="currentColor"
-                className="w-5 h-5 bi bi-map"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M15.817.113A.5.5 0 0 1 16 .5v14a.5.5 0 0 1-.402.49l-5 1a.502.502 0 0 1-.196 0L5.5 15.01l-4.902.98A.5.5 0 0 1 0 15.5v-14a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0L10.5.99l4.902-.98a.5.5 0 0 1 .415.103zM10 1.91l-4-.8v12.98l4 .8V1.91zm1 12.98 4-.8V1.11l-4 .8v12.98zm-6-.8V1.11l-4 .8v12.98l4-.8z"
-                />
-              </svg>
+            <div className="inline-flex items-center justify-center w-16 h-16 mx-auto mb-6 text-blue-600 bg-blue-100 rounded-lg ">
+              <LuBrainCircuit fontSize={24} />
             </div>
             <h2 className="mb-4 text-xl font-bold leading-tight md:text-2xl">
               AI Generated Content
@@ -32,20 +22,8 @@ const Features: React.FC = () => {
         </div>
         <div className="w-full px-4 mb-6 md:w-1/2 lg:w-1/3">
           <div className="h-full p-6 text-left transition duration-200 rounded-md ">
-            <div className="inline-flex items-center justify-center w-16 h-16 mx-auto mb-6 text-green-600 bg-green-100 rounded-lg ">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width={16}
-                height={16}
-                fill="currentColor"
-                className="w-5 h-5 bi bi-map"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M15.817.113A.5.5 0 0 1 16 .5v14a.5.5 0 0 1-.402.49l-5 1a.502.502 0 0 1-.196 0L5.5 15.01l-4.902.98A.5.5 0 0 1 0 15.5v-14a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0L10.5.99l4.902-.98a.5.5 0 0 1 .415.103zM10 1.91l-4-.8v12.98l4 .8V1.91zm1 12.98 4-.8V1.11l-4 .8v12.98zm-6-.8V1.11l-4 .8v12.98l4-.8z"
-                />
-              </svg>
+            <div className="inline-flex items-center justify-center w-16 h-16 mx-auto mb-6 text-blue-600 bg-blue-100 rounded-lg ">
+              <GrOptimize fontSize={24} />
             </div>
             <h2 className="mb-4 text-xl font-bold leading-tight md:text-2xl">
               Automated Optimization
@@ -58,20 +36,8 @@ const Features: React.FC = () => {
         </div>
         <div className="w-full px-4 mb-6 md:w-1/2 lg:w-1/3">
           <div className="h-full p-6 text-left transition duration-200 rounded-md ">
-            <div className="inline-flex items-center justify-center w-16 h-16 mx-auto mb-6 text-green-600 bg-green-100 rounded-lg ">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width={16}
-                height={16}
-                fill="currentColor"
-                className="w-5 h-5 bi bi-map"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M15.817.113A.5.5 0 0 1 16 .5v14a.5.5 0 0 1-.402.49l-5 1a.502.502 0 0 1-.196 0L5.5 15.01l-4.902.98A.5.5 0 0 1 0 15.5v-14a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0L10.5.99l4.902-.98a.5.5 0 0 1 .415.103zM10 1.91l-4-.8v12.98l4 .8V1.91zm1 12.98 4-.8V1.11l-4 .8v12.98zm-6-.8V1.11l-4 .8v12.98l4-.8z"
-                />
-              </svg>
+            <div className="inline-flex items-center justify-center w-16 h-16 mx-auto mb-6 text-blue-600 bg-blue-100 rounded-lg ">
+              <MdOutlineAttachMoney fontSize={24} />
             </div>
             <h2 className="mb-4 text-xl font-bold leading-tight md:text-2xl">
               Affordable Pricing

@@ -124,11 +124,11 @@ const Page: React.FC = () => {
                     </h3>
                     <p className="text-gray-600 text-xl font-bold">
                       {currentDate >= userProfile?.plan_validity
-                        ? format(
+                        ? "Expired"
+                        : format(
                             new Date(userProfile?.plan_validity),
                             "dd MMMM, yyyy"
-                          )
-                        : "Expired"}
+                          )}
                     </p>
                   </div>
                 </div>
@@ -194,46 +194,35 @@ const Page: React.FC = () => {
                       >
                         Status
                       </th>
-                      <th
-                        scope="col"
-                        className="py-3.5 px-3 text-left text-lg font-semibold text-gray-900"
-                      >
-                        Payment ID
-                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {orders
-                      ?.filter((order) => order.status !== "pending")
-                      .map((order, index) => (
-                        <tr key={order.id}>
-                          <td className="whitespace-nowrap font-semibold py-4 px-3 text-lg text-gray-500">
-                            {index + 1}
-                          </td>
-                          <td className="whitespace-nowrap font-semibold py-4 px-3 text-lg text-gray-500">
-                            {order.order_id}
-                          </td>
-                          <td className="whitespace-nowrap py-4 px-3 text-lg text-gray-500">
-                            &#8377;{order.amount}
-                          </td>
-                          <td
-                            className={`whitespace-nowrap capitalize py-4 px-3 text-lg text-gray-500`}
+                    {orders?.map((order, index) => (
+                      <tr key={order.id}>
+                        <td className="whitespace-nowrap font-semibold py-4 px-3 text-lg text-gray-500">
+                          {index + 1}
+                        </td>
+                        <td className="whitespace-nowrap font-semibold py-4 px-3 text-lg text-gray-500">
+                          {order.order_id}
+                        </td>
+                        <td className="whitespace-nowrap py-4 px-3 text-lg text-gray-500">
+                          &#8377;{order.amount}
+                        </td>
+                        <td
+                          className={`whitespace-nowrap capitalize py-4 px-3 text-lg text-gray-500`}
+                        >
+                          <span
+                            className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-medium ${
+                              order.status === "confirmed"
+                                ? "bg-green-100 text-green-800"
+                                : "bg-red-100 text-red-800"
+                            }`}
                           >
-                            <span
-                              className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-medium ${
-                                order.status === "confirmed"
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-red-100 text-red-800"
-                              }`}
-                            >
-                              {order.status}
-                            </span>
-                          </td>
-                          <td className="whitespace-nowrap py-4 px-3 text-lg text-gray-500">
-                            {order.payment_id}
-                          </td>
-                        </tr>
-                      ))}
+                            {order.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

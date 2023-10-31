@@ -7,33 +7,31 @@ interface PaymentResponse {
 
 const handlePaymentVerification = async (response: PaymentResponse) => {
   try {
-    const res = await api.post("/api/payment-confirm/", {
+    const res = await api.post("/profile/payment/confirm/", {
       response: response,
     });
     const result = await res.data;
     console.log(result);
     const status = await res.status;
     if (status === 200) {
-      toast.success("payment successful", { id: "1" });
-      window.location.href = "/dashboard";
+      toast.success("Payment Successful", { id: "1" });
+      window.location.href = "/user/dashboard";
     } else {
       toast.error("Something went wrong");
     }
   } catch (error) {
+    console.log(error);
     toast.error("server error", { id: "1" });
   }
 };
 
 export const showRazorpay = async (
-  token: string | null,
+  token: any | null,
   duration: string | "monthly"
 ) => {
-  if (!token) {
-    toast.error("Please login first", { id: "1" });
-    window.location.href = "/login";
-  }
+  toast.loading("Processing Payment...", { id: "1" });
   const response = await api.post(
-    "/api/profile/payment/",
+    "/profile/payment/",
     {
       duration: duration,
     },
@@ -45,24 +43,25 @@ export const showRazorpay = async (
   );
 
   const result = await response.data;
+  console.log(result);
   var options = {
     key: "",
     amount: result.payment.amount,
     currency: result.payment.currency,
-    name: "My Trip My Ticket",
-    description: "Book your travel now",
+    name: "Coderlink",
+    description: "",
     image: "/logo.png",
     order_id: result.payment.id,
     handler: function (response: PaymentResponse) {
       handlePaymentVerification(response);
     },
     prefill: {
-      name: result.user.name,
-      email: result.user.email,
-      contact: result.user.phone,
+      name: result.order.user.name,
+      email: result.order.user.email,
+      contact: result.order.user.phone || "",
     },
     theme: {
-      color: "#3399cc",
+      color: "#3f00ff",
     },
   };
   var rzp1 = new (window as any).Razorpay(options);

@@ -20,8 +20,8 @@ const Hero: React.FC = () => {
                 </h1>
                 <p className=" mb-12 text-base !leading-relaxed text-body-color sm:text-lg md:text-xl">
                   Stop wasting your time researching and writing content
-                  yourself. With Metabyte, you can get high quality content with
-                  ease.
+                  yourself. With Coderlink, you can get high quality content
+                  with ease.
                 </p>
                 <div className="flex flex-col items-center justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
                   <Link

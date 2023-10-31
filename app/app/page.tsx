@@ -3,7 +3,7 @@ import Loader from "@/components/Loader/Loader";
 import { api } from "@/components/api/api";
 import Cookies from "js-cookie";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
@@ -15,6 +15,7 @@ const page: React.FC = () => {
   const [chatItems, setChatItems] = useState<[]>([]);
   const searchParams = useSearchParams();
   const chatQuery = searchParams.get("chat");
+  const router = useRouter();
 
   const fetchChats = async () => {
     try {
@@ -71,6 +72,9 @@ const page: React.FC = () => {
       const status = response.status;
       const result = response.data;
       if (status === 200) {
+        if (!chatQuery) {
+          router.push(`/app/?chat=${result.chat}`);
+        }
         fetchChatItems(result.chat);
         toast.dismiss();
       } else {
@@ -96,7 +100,7 @@ const page: React.FC = () => {
   return (
     <div>
       {/* Content */}
-      <div className="h-[45rem] md:h-[50rem] flex flex-col pb-6 relative">
+      <div className="h-[38rem] md:h-[42rem] flex flex-col pb-6 relative">
         <div className="flex flex-col justify-between h-full">
           <div className="max-w-5xl w-full text-center mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-xl font-bold text-gray-800 sm:text-4xl">
@@ -106,7 +110,7 @@ const page: React.FC = () => {
               Ready to experience the power of AI content creation? Enter your
               prompt below:
             </p>
-            <div className="mt-6 h-[25rem] md:h-[35rem] overflow-y-auto">
+            <div className="mt-6 h-[25rem] md:h-[32rem] overflow-y-auto">
               {chatItems.length > 0
                 ? chatItems?.map(
                     (chat: any) =>
